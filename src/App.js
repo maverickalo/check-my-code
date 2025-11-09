@@ -13,14 +13,26 @@ function App() {
     setResults(null);
 
     try {
-      // Try direct API call first
+      // Ensure code is a string and not empty
+      const codeString = typeof code === 'string' ? code.trim() : String(code).trim();
+
+      if (!codeString) {
+        throw new Error('Please provide some code to evaluate');
+      }
+
+      console.log('Sending code to API:', codeString.substring(0, 100) + '...'); // Debug log
+
       const apiUrl = process.env.REACT_APP_API_URL || 'https://primary-production-809b9.up.railway.app/webhook/eval';
+      const requestBody = { code: codeString };
+
+      console.log('Request body:', requestBody); // Debug log
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
