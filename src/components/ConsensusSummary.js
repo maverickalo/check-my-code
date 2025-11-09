@@ -18,6 +18,9 @@ const ConsensusSummary = ({ results }) => {
   };
 
   const getRecommendationText = () => {
+    if (consensus.primaryConcerns && Array.isArray(consensus.primaryConcerns)) {
+      return `Primary concerns: ${consensus.primaryConcerns.join(', ')}`;
+    }
     if (consensus.summary) {
       return consensus.summary;
     }
@@ -67,9 +70,9 @@ const ConsensusSummary = ({ results }) => {
 
       <div className="summary-stats">
         <div className="stat-card consensus">
-          <div className="stat-icon">{(consensus.agree || consensus.agreed) ? '✅' : '❌'}</div>
+          <div className="stat-icon">{(consensus.agree || consensus.agreed || consensus.agreement) ? '✅' : '❌'}</div>
           <div className="stat-info">
-            <div className="stat-number">{(consensus.agree || consensus.agreed) ? 'Yes' : 'No'}</div>
+            <div className="stat-number">{(consensus.agree || consensus.agreed || consensus.agreement) ? 'Yes' : 'No'}</div>
             <div className="stat-label">Reviewers Agree</div>
           </div>
         </div>
@@ -105,6 +108,14 @@ const ConsensusSummary = ({ results }) => {
               <div className="stat-info">
                 <div className="stat-number">{results.issueSummary.bySeverity?.medium || results.issueSummary.medium || 0}</div>
                 <div className="stat-label">Medium Severity</div>
+              </div>
+            </div>
+
+            <div className="stat-card info">
+              <div className="stat-icon">💡</div>
+              <div className="stat-info">
+                <div className="stat-number">{results.issueSummary.bySeverity?.low || results.issueSummary.low || 0}</div>
+                <div className="stat-label">Low Severity</div>
               </div>
             </div>
 
